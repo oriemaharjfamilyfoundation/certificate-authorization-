@@ -65,7 +65,7 @@ openssl req -new -sha256 \
 
 
 
-## Verify the csr's content
+## Verified the csr content
 
 
 openssl req -in oriemaharaj.org.csr -noout -text
