@@ -1,6 +1,6 @@
-# Create Root CA (Done once)
+# Root CA
 
-## Create Root Key
+## Root Key
 
 **Attention:** this is the key used to sign the certificate requests, anyone holding this can sign certificates on your behalf. So keep it in a safe place!
 
@@ -8,10 +8,7 @@
 openssl genrsa -out rootCA.key 4096
 
 
-If you want a non password protected key just remove the `-des3` option
-
-
-## Create and self sign the Root Certificate
+## Self sign the Root Certificate
 
 
 openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out rootCA.crt
@@ -20,24 +17,24 @@ openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out rootCA.crt
 Here we used our root key to create the root certificate that needs to be distributed in all the computers that have to trust us.
 
 
-# Create a certificate (Done for each server)
+# Certificate (Done for each server)
 
 This procedure needs to be followed for each server/appliance that needs a trusted certificate from our CA
 
-## Create the certificate key
+## The certificate key
 
 
 openssl genrsa -out oriemaharaj.org.key 2048
 
 
-## Create the signing  (csr)
+## The signing  (csr)
 
 The certificate signing request is where you specify the details for the certificate you want to generate.
 This request will be processed by the owner of the Root key (you in this case since you create it earlier) to generate the certificate.
 
 **Important:** Please mind that while creating the signign request is important to specify the `Common Name` providing the IP address or domain name for the service, otherwise the certificate cannot be verified.
 
-I will describe here two ways to gener
+I will describe here two ways to generate 
 
 ### Method A (Interactive)
 
@@ -74,13 +71,13 @@ openssl req -new -sha256 \
 openssl req -in oriemaharaj.org.csr -noout -text
 
 
-## Generate the certificate using the `mydomain` csr and key along with the CA Root key
+## Generating the certificate using the `oriemaharaj` csr and key along with the CA Root key
 
 
-openssl x509 -req -in oriemaharaj.org.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out mydomain.com.crt -days 500 -sha256
+openssl x509 -req -in oriemaharaj.org.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out oriemaharaj.org.crt -days 500 -sha256
 
 
-## Verify the certificate's content
+## Verified certificate's content
 
 
 openssl x509 -in oriemaharaj.org.crt -text -noout
